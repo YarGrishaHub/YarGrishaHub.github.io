@@ -1,0 +1,158 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	background: #22092C;
+}
+
+.shapka {
+	width: 100%;
+	height: 60px;
+	z-index: 3;
+	position: fixed;
+	background: grey;
+    
+}
+
+.shapka-align {
+	width: 95%;
+	margin: auto;
+	height: inherit;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.logo {
+	width: 400px;
+	font-weight: 600;
+	font-size: 26px;
+}
+
+.menu-item {
+	display: inline-block;
+	margin-right: 30px;
+}
+
+.menu-link {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+	transition: 1s;
+	padding: 20px 15px;
+}
+
+.menu-link:hover {
+	color: goldenrod;
+	letter-spacing: 2px;
+	background: black;
+	color: whitesmoke;
+}
+
+.up {
+	width: 40px;
+	height: 40px;
+	background: url(../img/arrow.png);
+	position: fixed;
+	bottom: 40px;
+	right: 40px;
+	text-align: center;
+	background-size: cover;
+}
+
+.header {
+	height: calc(100%);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 50%;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 50px 80px black;
+}
+
+.h1{
+	font-size: 45px;
+	letter-spacing: 4px;
+	padding: 10px;
+	color: whitesmoke;
+}
+
+.subtitle {
+	margin-bottom: 15px;
+	color: whitesmoke;
+	font-size: 20px;
+}
+
+.main {
+	width: 70%;
+	height: 100%;
+	margin: auto;
+	margin-top: 100px;
+}
+
+.viz-wrapper {
+	width: 100%;
+	height: 45%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #4F6F52;
+}
+
+.podval {
+	width: 70%;
+	text-align: center;
+}
+
+.h2 {
+	font-size: 45px;
+	color: white;
+	margin-bottom: 30px;
+}
+
+/*.yes {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	display: flex;
+	align-items: center;
+	color: #637E76;
+	font-size: 20px;
+}
+
+.img-2 {
+	width: 100px;
+	margin-right: 5px;
+}*/
+
+footer {
+	width: 100%;
+	height: 45%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #4F4A45;
+	margin-bottom: 100px;
+}
+
+.with-item {
+	height: 330px;
+	width: 8%;
+}
+
+.with-img {
+	width: 100%;
+	margin-top: 100px;
+}
+
+.with1 {
+	justify-content: space-around;
+}

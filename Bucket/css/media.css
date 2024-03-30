@@ -1,0 +1,36 @@
+@media (max-width: 420px) and (max-height: 930px) {
+    body {
+        background: red;
+    }
+    .media {
+        height: 850px;
+    }
+    .post {
+        padding-bottom: -252px;
+    }
+    .col-md-4 {
+        width: 50%;
+        text-align: center;
+    }
+}
+
+
+/*
+1920 1080
+
+1600 1024
+
+1366 980
+1300 - 1500 x 700 - 1000
+1366 780
+
+1280 1024
+
+640 960
+
+640 480
+
+500 1000
+
+320 900
+*/

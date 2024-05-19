@@ -1,0 +1,154 @@
+.img {
+    width: 100%;
+    height: 100vh;
+    background-image: url(../img/main.png);
+    background-position: center;
+    position: relative;
+}
+
+.img:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+}
+
+.img > h1 {
+    z-index: 1;
+    color: white;
+}
+
+.c-white {
+    color: white;
+}
+
+.c-black {
+    color: black;
+}
+
+.fs-30 {
+    font-size: 30px;
+}
+
+.fs-15 {
+    font-size: 15px;
+}
+
+.center-both {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img2 {
+    height: 474px;
+    width: 474px;
+    background: url(../img/home.jpg);
+    background-size: contain;
+    background-position: left;
+    background-repeat: no-repeat;
+}
+
+.f-size {
+    font-size: 70px;
+}
+
+.t-1 {
+    font-size: 40px;
+}
+
+.t-2 {
+    font-size: 20px;
+}
+
+.t-3 {
+    width: 50%;
+}
+
+.b {
+    background: red;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+.shapka {
+    background: white;
+    color: black;
+}
+
+.shapka > .ff {
+    color: black;
+}
+
+.rgba {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.rrg{
+    background: grey;
+    color: ;
+}
+
+.b-none {
+    border: none;
+}
+
+.img3 {
+    width: 555px;
+    height: 555px;
+    background: url(../img/team.jpg);
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+.t-4 {
+    width: 35%;
+}
+
+.img4 {
+    width: 555px;
+    height: 555px;
+    background: url(../img/team2.jpg);
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;    
+}
+
+.info {
+    margin-bottom: 50px;
+    float: left;
+    width: 100%;
+    position: relative;
+    font-size: 20px;
+}
+
+footer {
+	width: 100%;
+    height: 70%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: antiquewhite;
+    margin-top: 20px;
+    padding: 25px;
+}
+
+.podval {
+	width: 70%;
+    height: 30%;
+	
+}
+
+.small {
+    font-size: 85%;
+}
+
+.c {
+    margin-top: 200px;
+}

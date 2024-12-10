@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+
+	<canvas id="canvas"></canvas>
+
+
+
+	<script>
+		const holst = document.querySelector('#canvas');
+		const pero = holst.getContext('2d');
+
+		holst.height = window.innerHeight;
+		holst.width = window.innerWidth;
+
+
+		
+		pero.font = '50px monospace'; 
+
+
+		let GameOver = true;
+
+
+
+
+		
+		const collision = (a,b) => (
+			   a.x < b.x + b.width
+			&& a.x + a.width > b.x
+			&& a.y < b.y + b.height
+			&& a.y + a.height > b.y
+			);
+
+
+		const game = () => {
+			pero.fillStyle = 'red';
+			pero.fillRect(0,0, holst.width, holst.height);
+			pero.fillStyle = 'black';
+			pero.fillText("Нажмите ENTER для старта игры",100,100)
+		}
+
+		
+		const stenka = {
+			x: 0,
+			y: 0,
+			steni: [],
+			
+			stop(player) {
+				
+				this.steni.unshift({
+					x: 0,
+					y: 0,
+					width: 20,
+					height: holst.height
+					});
+				this.steni.unshift({
+					x: holst.width - 20,
+					y: 0,
+					width: 20,
+					height: holst.height
+					});
+				this.steni.unshift({
+					x: 0,
+					y: 0,
+					width: holst.width,
+					height: 20
+					});
+				this.steni.unshift({
+					x: 0,
+					y: holst.height - 20,
+					width: holst.width,
+					height: 20
+					});
+				
+				
+				
+				this.steni.forEach( (stena) => {
+					pero.beginPath(); 
+				pero.fillStyle = 'purple';
+					pero.fillRect(stena.x, stena.y, stena.width, stena.height);
+					if (collision(stena, player) && !GameOver) GameOver = true;
+				})
+				
+
+			}
+		}
+
+
+
+	
+		const apple = {
+			x: parseInt(Math.random() * (holst.width - 80) + 40),
+			y: parseInt(Math.random() * (holst.height - 80) + 40),
+			width: 7.5,
+			height: 7.5,
+			radius: 5,
+			score: 0,
+			collect(player) {
+				
+				if (collision(this, player)) {
+					this.x = parseInt(Math.random() * (holst.width - 80) + 40);
+					this.y = parseInt(Math.random() * (holst.height - 80) + 40);
+					this.score++;
+					player.length++;
+				}
+
+				pero.beginPath();
+				pero.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+				pero.fillStyle = 'red';
+				pero.fill();
+
+			}
+		}
+
+
+
+
+
+
+
+
+		const player = {
+			x: 60,
+			y: 60,
+			width: 20,
+			height: 20,
+			speed: 1,
+			dx: 20,
+			dy: 0,
+			length: 3, 
+			segments: [],
+			restart() {
+				this.x =  60;
+				this.y =  60;
+				this.dx =  20;
+				this.dy =  0;
+				this.length =  3;
+				this.segments = [];
+				apple.score = 0;
+			},
+
+		
+			move() {
+								
+				pero.fillStyle = 'red'
+				
+				if (keys[87] && this.dy != 20){// w
+					this.dx = 0;
+					this.dy = -20;
+
+				} 
+				if (keys[83] && this.dy != -20){// s
+					this.dx = 0;
+					this.dy = 20;
+
+				} 
+				if (keys[68] && this.dx != -20){// d
+					this.dx = 20;
+					this.dy = 0;
+
+				} 
+				if (keys[65] && this.dx != 20){// a
+					this.dx = -20;
+					this.dy = 0;
+
+				} 
+				if (keys[16]){// shift
+					player.speed = 2;
+
+				}
+				else {
+					player.speed = 1;
+				} 
+				
+				this.x += this.dx;
+				this.y += this.dy;
+
+				
+				this.segments.unshift({
+					x: this.x - this.dx,
+					y: this.y - this.dy,
+					width: this.width,
+					height: this.width
+					});
+
+				if (this.segments.length > this.length){
+					this.segments.pop(); 
+				}
+
+				pero.fillStyle = 'green';
+				this.segments.forEach( (segment) => {
+					pero.fillRect(segment.x, segment.y, this.width - 1, this.height - 1);
+					if (collision(segment, player) && !GameOver) GameOver = true;
+				})
+				
+
+
+				
+
+			}
+		}
+
+		
+		const keys = [];
+
+		document.addEventListener('keydown', (event) => {
+			keys[event.keyCode] = true;
+		});
+
+		document.addEventListener('keyup', (event) => {
+			keys[event.keyCode] = false;
+		});
+
+
+
+		let frame = 0;
+		const mainloop = () => {
+
+			if (keys[13]){// enter
+					GameOver = false;
+					player.restart();
+				}
+			
+			requestAnimationFrame(mainloop);
+			if (!GameOver) {
+				frame += player.speed;
+				if (frame < 6) return;
+				frame = 0;
+				pero.clearRect(0,0,holst.width,holst.height);
+				player.move();
+				apple.collect(player);
+				stenka.stop(player);
+				pero.fillStyle = 'black'
+				pero.fillText('Ваш счёт: ' + apple.score, 10, 50);
+			}
+			else {
+				game();
+			}
+			
+		}
+
+
+		requestAnimationFrame(mainloop);
+
+
+
+
+	</script>
+	
+</body>
+</html>
+
+
+
+
+
+
+
+
+

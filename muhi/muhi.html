@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background: grey;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #canvas {
+      width: 800px;
+      height: 600px;
+      border: 3px solid black;
+      background: white;
+
+    }
+    #score {
+      font-size: 40px;
+      font-family: monospace;
+      color: white;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+      position: absolute;
+      top: 10px;
+      margin: 0;
+      user-select: none;
+    }
+    #health {
+      font-size: 40px;
+      font-family: monospace;
+      color: white;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.6);
+      position: absolute;
+      top: 50px;
+      margin: 0;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  
+  <h1 id= "score">0</h1>
+  <h1 id= "health">0</h1>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    
+    const score = document.getElementById('score');
+    const health = document.getElementById('health');
+    const holst = document.getElementById('canvas');
+    const pero = holst.getContext('2d');
+
+    holst.width = 800;
+    holst.height = 600;
+
+    const keys = [];
+    let angle = 0;
+
+    let scorePoints = 0;
+
+    
+
+    function drawRotatedImage(image, object, angle) {
+      pero.save();
+      pero.translate(object.x, object.y);
+      pero.rotate(angle);
+      pero.drawImage(image, -(object.width/2), -(object.height/2), object.width, object.height);
+      pero.restore();
+    }
+
+    const collision = (a,b) => (
+      a.x < b.x + b.width
+    && a.x + a.width > b.x
+    && a.y < b.y + b.height
+    && a.y + a.height > b.y
+    );
+
+    class pushka {
+      constructor(player) {
+        this.width  = 20;
+        this.height = 20;
+        this.dx = Math.cos(angle - Math.PI/2) * 10;
+        this.dy = Math.sin(angle - Math.PI/2) * 10;
+        this.x = player.x + this.dx - 10;
+        this.y = player.y + this.dy -10;
+        this.image = new Image();
+        this.image.src = 'bullet1.png';
+        this.isActive = true;
+      }
+
+      shoot() {
+        this.x += this.dx;
+        this.y += this.dy;
+        pero.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+        if (this.x < 0 || this.x > holst.width ||
+          this.y < 0 || this.y > holst.height
+          ) {
+          this.isActive  = false;
+          console.log('pomerla');
+        }
+      
+
+      for (let alien of aliens) {
+        if (collision(this, alien)) {
+          scorePoints += 100;
+          alien.isActive = false;
+          this.isActive = false;
+          break;
+
+        }
+      }
+      for (let alien2 of aliens2) {
+        if (collision(this, alien2)) {
+          alien2.health--;
+          if (alien2.health < 1) {
+            alien2.isActive = false;
+            scorePoints += 200;
+          }
+          this.isActive = false;
+          break;
+          
+        }
+      }
+      for (let alien3 of aliens3) {
+        if (collision(this, alien3)) {
+          alien3.health--;
+          if (alien3.health < 1) {
+            alien3.isActive = false;
+            scorePoints += 300;
+          }
+          this.isActive = false;
+          break;
+          
+        }
+      }
+   } 
+}
+
+
+
+
+
+      const player = {
+      x: 400,
+      y: 400,
+      speed: 1,
+      width:  50 * (193 / 314),
+      height: 50,
+      health: 999,
+
+      image: new Image(),
+      
+      move() {
+        if (keys[87]) this.y -= this.speed;
+        if (keys[65]) this.x -= this.speed;
+        if (keys[83]) this.y += this.speed;
+        if (keys[68]) this.x += this.speed;
+
+      for (let alien of aliens) {
+        if (collision(this, alien)) {
+          this.health--;
+        }
+      }
+      for (let alien2 of aliens2) {
+        if (collision(this, alien2)) {
+          this.health--;
+         }
+      }
+      for (let alien3 of aliens3) {
+        if (collision(this, alien3)) {
+          this.health--;
+        }
+      }
+        
+      },
+      draw: function() {
+        drawRotatedImage(this.image, this, angle);
+      }
+
+      }
+
+    class Enemy {
+      constructor (speed) {
+        let side = Math.round (Math.random () * 3);
+        let randomW = parseInt (Math.random () * holst.width);
+        let randomH = parseInt (Math.random () * holst.height);
+        let positions = [[-50, randomW], [holst.width + 50,
+        randomH], [randomW, holst.height + 50], [randomW, -50]];
+        this.x = positions[side][0];
+        this.y = positions[side][1];
+        // console.log('this.x: ', this.x);
+        // console.log('this.y: ', this.y);
+        this.speed = 1;
+        this.image = new Image();
+        this.image.src = 'muha.png';
+
+        this.width = 60;
+        this.height = 60*(288/261);
+        this.isActive = true;
+
+      }
+
+    attack(player) {
+      let dx = player.x - this.x;
+      let dy = player.y - this.y;
+      let distance = Math.sqrt(dx**2 + dy**2);
+      let collisionWithPlayer = collision(player, this);
+
+      if(!collisionWithPlayer) {
+        this.x += (dx / distance * this.speed);
+        this.y += (dy / distance * this.speed);
+      }
+
+      let angleToPlayer = Math.atan2(dy,dx) + Math.PI/2;
+
+      drawRotatedImage(this.image, this, angleToPlayer);
+    }
+  }
+
+class Enemy2 {
+      constructor (speed) {
+        let side = Math.round (Math.random () * 3);
+        let randomW = parseInt (Math.random () * holst.width);
+        let randomH = parseInt (Math.random () * holst.height);
+        let positions = [[-50, randomW], [holst.width + 50,
+        randomH], [randomW, holst.height + 50], [randomW, -50]];
+        this.x = positions[side][0];
+        this.y = positions[side][1];
+        console.log('this.x: ', this.x);
+        console.log('this.y: ', this.y);
+        this.speed = 1;
+        this.image = new Image();
+        this.image.src = 'muha2.png';
+
+        this.width = 60;
+        this.height = 60*(288/261);
+        this.isActive = true;
+        this.health = 2;
+
+      }
+
+    attack(player) {
+      let dx = player.x - this.x;
+      let dy = player.y - this.y;
+      let distance = Math.sqrt(dx**2 + dy**2);
+      let collisionWithPlayer = collision(player, this);
+
+      if(!collisionWithPlayer) {
+        this.x += (dx / distance * this.speed);
+        this.y += (dy / distance * this.speed);
+      }
+
+      let angleToPlayer = Math.atan2(dy,dx) + Math.PI/2;
+
+      drawRotatedImage(this.image, this, angleToPlayer);
+    }
+  }
+
+class Enemy3 {
+      constructor (speed) {
+        let side = Math.round (Math.random () * 3);
+        let randomW = parseInt (Math.random () * holst.width);
+        let randomH = parseInt (Math.random () * holst.height);
+        let positions = [[-50, randomW], [holst.width + 50,
+        randomH], [randomW, holst.height + 50], [randomW, -50]];
+        this.x = positions[side][0];
+        this.y = positions[side][1];
+        console.log('this.x: ', this.x);
+        console.log('this.y: ', this.y);
+        this.speed = 1;
+        this.image = new Image();
+        this.image.src = 'muha3.png';
+
+        this.width = 60;
+        this.height = 60*(288/261);
+        this.isActive = true;
+        this.health = 3;
+
+      }
+
+    attack(player) {
+      let dx = player.x - this.x;
+      let dy = player.y - this.y;
+      let distance = Math.sqrt(dx**2 + dy**2);
+      let collisionWithPlayer = collision(player, this);
+
+      if(!collisionWithPlayer) {
+        this.x += (dx / distance * this.speed);
+        this.y += (dy / distance * this.speed);
+      }
+
+      let angleToPlayer = Math.atan2(dy,dx) + Math.PI/2;
+
+      drawRotatedImage(this.image, this, angleToPlayer);
+    }
+  }
+
+
+    player.image.src = 'player.png';
+
+    document.addEventListener('keydown', function(e)  {
+    keys[e.keyCode] = true;});
+    document.addEventListener('keyup', function(e) {
+    keys[e.keyCode] = false;});
+
+    document.body.addEventListener("mousemove", function(e) {
+      let x = e.offsetX - player.x;
+      let  y = e.offsetY - player.y;
+      // console.log('e.layerX: ', e.layerX);
+      angle = Math.atan2(y, x) + Math.PI/2;
+    });
+
+
+    let pushki = [];
+      let aliens = [];
+      let aliens2 = [];
+      let aliens3 = [];
+
+  setInterval(function (){
+    if(aliens.length < 3)
+      aliens.push(new Enemy(parseInt(Math.random() + 2)));
+    if(aliens2.length < 3)
+      aliens2.push(new Enemy2(parseInt(Math.random() + 2)));
+    if(aliens3.length < 3)
+      aliens3.push(new Enemy3(parseInt(Math.random() + 2)));
+  }, 1000);
+
+  
+
+    document.addEventListener("click", function(e) {
+      pushki.push(new pushka(player));
+    });
+
+
+  function mainloop() {
+    requestAnimationFrame(mainloop);
+
+    if (player.health < 1) {
+      pero.clearRect(0, 0, holst.width, holst.height);
+       if (keys[13]) {
+          player.x = 400;
+          player.y = 300;
+          player.health = 999;
+          aliens = [];
+          aliens2 = [];
+          aliens3 = [];
+          scorePoints = 0;
+       }
+    }
+    else {
+      pero.clearRect(0, 0, holst.width, holst.height);
+
+    for (let pupushka of pushki) {
+      pupushka.shoot();
+    }
+
+    for (let alien of aliens) {
+      alien.attack(player);
+    }
+
+    for (let alien2 of aliens2) {
+      alien2.attack(player);
+    }
+
+    for (let alien3 of aliens3) {
+      alien3.attack(player);
+    }
+
+    pushki = pushki.filter((l) => l.isActive);
+
+    aliens = aliens.filter((a) => a.isActive);
+    aliens2 = aliens2.filter((a) => a.isActive);
+    aliens3 = aliens3.filter((a) => a.isActive);
+    score.textContent = scorePoints;
+    health.textContent = player.health;
+
+
+    player.move();
+    player.draw();
+    }
+    
+ } 
+
+  mainloop();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+     <style>
+        #cw {
+          position: fixed;
+          z-index: -1;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: rgb(0 0 200);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cw"></canvas>
+   
+   
+   
+   
+   <script>
+       // задаём цвета
+       const COLORS = [
+  "red",
+  "blue",
+  "green",
+  "yellow",
+  "pink",
+  "purple",
+];
+
+function createparticle(x,y) {
+    const element = document.createElement("div");
+  element.style.width = "10px";
+  element.style.height = "10px";
+  element.style.border = "1px solid black";
+  // ставим блок на место курсора в момент клика
+  element.style.position = "absolute";
+  element.style.top = y + 'px';
+  element.style.left = x + 'px';
+  // сдвигаем блок вверх и влево на половины ширины и высоты (курсор - центр)
+  element.style.transform = "translate(-50%, -50%)";
+  // рандомим цвет из массива
+  element.style.backgroundColor =
+    COLORS[Math.floor(Math.random() * COLORS.length)];
+    const animation = element.animate(
+        [
+        {
+            transform: "translateY(" + (Math.random() - 0.5) * 500 + "px) translateX(" + (Math.random() - 0.5) * 500 + "px)"
+            + " rotate("+ (Math.random() - 0.5 ) * 1000 +"deg)", 
+            opacity: "0"
+        }
+            ],
+        1000
+        )
+    animation.onfinish = () => element.remove()
+    document.body.appendChild(element);
+}
+
+document.addEventListener("click", (e) => {
+  // по клику будем создавать элемент на позиции курсора
+  const { clientX: x, clientY: y } = e;
+
+  for (let i = 0; i < 21; i++) {
+    createparticle(x,y)
+  }
+
+  
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const canvas = document.getElementById("cw");
+const context = canvas.getContext("2d");
+context.globalAlpha = 0.5;
+
+const cursor = {
+  x: innerWidth / 2,
+  y: innerHeight / 2,
+};
+
+let particlesArray = [];
+
+generateParticles(1);
+canvas.height = innerHeight;
+canvas.width = innerWidth;
+anim();
+
+addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX;
+  cursor.y = e.clientY;
+});
+
+addEventListener(
+  "touchmove",
+  (e) => {
+    e.preventDefault();
+    cursor.x = e.touches[0].clientX;
+    cursor.y = e.touches[0].clientY;
+  },
+  { passive: false },
+);
+
+
+
+function generateParticles(amount) {
+  for (let i = 0; i < amount; i++) {
+    particlesArray[i] = new Particle(
+      innerWidth / 2,
+      innerHeight / 2,
+        "green",
+      0.02,
+    );
+  }
+}
+
+
+
+
+function Particle(x, y,  strokeColor, rotateSpeed) {
+  this.x = x;
+  this.y = y;
+  this.particleTrailWidth = 3;
+  this.strokeColor = strokeColor;
+  this.theta = Math.random() * Math.PI * 2;
+  this.rotateSpeed = rotateSpeed;
+  this.t = Math.random() * 150;
+
+  this.rotate = () => {
+    const ls = {
+      x: this.x,
+      y: this.y,
+    };
+    this.theta += this.rotateSpeed;
+    this.x = cursor.x;
+    this.y = cursor.y;
+    context.beginPath();
+    context.lineWidth = this.particleTrailWidth;
+    context.strokeStyle = this.strokeColor;
+    context.moveTo(ls.x, ls.y);
+    context.lineTo(this.x, this.y);
+    context.stroke();
+  };
+}
+
+function anim() {
+  requestAnimationFrame(anim);
+
+  context.fillStyle = "rgb(0 0 0 / 5%)";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  particlesArray.forEach((particle) => particle.rotate());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    
+</body>
+</html>
